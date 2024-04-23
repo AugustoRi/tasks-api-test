@@ -51,4 +51,26 @@ public class APITest {
                 .body("message", is("Due date must not be in past"))
         ;
     }
+
+    @Test
+    public void deveRemoverTarefaComSucesso() {
+        Integer id = RestAssured
+            .given()
+                .body("{\"task\": \"Tarefa teste\", \"dueDate\": \"2050-12-15\"}")
+                .contentType(ContentType.JSON)
+            .when()
+                .post("/todo")
+            .then()
+                .statusCode(201)
+                .extract().path("id")
+        ;
+
+        RestAssured
+                .given()
+                .when()
+                    .delete("/todo/"+id)
+                .then()
+                    .statusCode(204)
+        ;
+    }
 }
